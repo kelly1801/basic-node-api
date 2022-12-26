@@ -4,7 +4,7 @@ import { router } from "../routes/user.route.js";
 export default class Server {
   constructor() {
     this.app = express();
-    this.port = process.env.PORT;
+    this.port = process.env.PORT || 3001;
     this.pathUsers = '/api/users'
     this.middlewares();
     this.routes();
