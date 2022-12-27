@@ -32,4 +32,9 @@ import { Schema, model } from "mongoose";
   },
 });
 
+userSchema.methods.toJSON = function() {
+  const {__v, password, ...user} = this.toObject();
+return user
+}
+
 export default model('User', userSchema)
