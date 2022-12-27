@@ -23,14 +23,7 @@ export const userPost = async (req, res) => {
  
   const { name, email, password, role } = req.body;
   const user = new User({ name, email, password, role });
-// validate if email exist
-const existEmail = await User.findOne({email})
 
-if (existEmail) {
-  return res.status(400).json({
-    msg: 'this email is already on use'
-  })
-}
 
 // number of hashes to encrypt by default it's 10
 
