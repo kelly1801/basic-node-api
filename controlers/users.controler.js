@@ -1,7 +1,6 @@
 import { response, request } from "express";
 import User from "../models/user.js";
-import bcryptjs from 'bcryptjs'
-import { validationResult } from "express-validator";
+import bcryptjs from "bcryptjs";
 export const userGet = (req = request, res = response) => {
   const query = req.query;
 
@@ -11,27 +10,35 @@ export const userGet = (req = request, res = response) => {
   });
 };
 
-export const userPut = (req, res) => {
+export const userPut = async (req, res) => {
   const { id } = req.params;
+  const {_id, password, google, email, ...prevValues } = req.body;
+
+
+  if (password) {
+    const salt = bcryptjs.genSaltSync();
+    prevValues.password = bcryptjs.hashSync(password, salt);
+  }
+
+  const user = await User.findByIdAndUpdate(id, prevValues )
+
   res.json({
     message: "put API | controler",
-    id,
+    user,
   });
 };
 
 export const userPost = async (req, res) => {
- 
   const { name, email, password, role } = req.body;
   const user = new User({ name, email, password, role });
 
+  // number of hashes to encrypt by default it's 10
 
-// number of hashes to encrypt by default it's 10
+  const salt = bcryptjs.genSaltSync();
+  user.password = bcryptjs.hashSync(password, salt);
+  // encrypt the password
 
-const salt = bcryptjs.genSaltSync()
-user.password = bcryptjs.hashSync(password , salt )
-// encrypt the password
-
-//save in db
+  //save in db
 
   await user.save();
   res.json({

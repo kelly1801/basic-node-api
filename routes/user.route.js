@@ -8,11 +8,24 @@ import {
   userPost,
 } from "../controlers/users.controler.js";
 import { validateFields } from "../middleware/validate-fields.js";
-import { isValidRole, isValidEmail } from "../utils/db-validators.js";
+import {
+  isValidRole,
+  isValidEmail,
+  findUserById,
+} from "../utils/db-validators.js";
 export const router = Router();
 
 router.get("/", userGet);
-router.put("/:id", userPut);
+router.put(
+  "/:id",
+  [
+    check("id", "Is NOT a valid ID").isMongoId(),
+    check("id").custom(findUserById),
+    check("role").custom(isValidRole),
+    validateFields,
+  ],
+  userPut
+);
 router.post(
   "/",
   [
