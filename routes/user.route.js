@@ -8,11 +8,13 @@ import {
   userPost,
 } from "../controlers/users.controler.js";
 import { validateFields } from "../middleware/validate-fields.js";
+import { validateJWT } from "../middleware/validate-jwt.js";
 import {
   isValidRole,
   isValidEmail,
   findUserById,
 } from "../utils/db-validators.js";
+
 export const router = Router();
 
 router.get("/", userGet);
@@ -41,6 +43,7 @@ router.post(
 );
 router.patch("/", userPatch);
 router.delete("/:id",[
+  validateJWT,
   check("id", "Is NOT a valid ID").isMongoId(),
   check("id").custom(findUserById),
   validateFields
