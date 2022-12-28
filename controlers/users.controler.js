@@ -1,29 +1,34 @@
 import { response, request } from "express";
 import User from "../models/user.js";
 import bcryptjs from "bcryptjs";
-export const userGet = (req = request, res = response) => {
-  const query = req.query;
+export const userGet = async (req = request, res = response) => {
+  const { limit = 5, from = 0 } = req.query;
+
+  const query = { status: true };
+  const [total, users] = await Promise.all([
+    User.countDocuments(query),
+    User.find(query).skip(Number(from)).limit(Number(limit)),
+    
+  ]);
 
   res.json({
-    message: "get API | controler",
-    query,
+    total,
+    users
   });
 };
 
 export const userPut = async (req, res) => {
   const { id } = req.params;
-  const {_id, password, google, email, ...prevValues } = req.body;
-
+  const { _id, password, google, email, ...prevValues } = req.body;
 
   if (password) {
     const salt = bcryptjs.genSaltSync();
     prevValues.password = bcryptjs.hashSync(password, salt);
   }
 
-  const user = await User.findByIdAndUpdate(id, prevValues )
+  const user = await User.findByIdAndUpdate(id, prevValues);
 
   res.json({
-    message: "put API | controler",
     user,
   });
 };
@@ -53,8 +58,15 @@ export const userPatch = (req, res) => {
   });
 };
 
-export const userDelete = (req, res) => {
-  res.json({
-    message: "delete API | controler",
-  });
+export const userDelete = async(req, res) => {
+ const { id } = req.params
+
+ // how to delete the doc from the db
+ // is not a good practice to delete it like this
+ //const user = await User.findByIdAndDelete( id )
+ 
+ // good practice
+
+ const user = await User.findByIdAndUpdate(id, {status: false})
+ res.json(user);
 };
