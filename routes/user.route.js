@@ -7,8 +7,12 @@ import {
   userDelete,
   userPost,
 } from "../controlers/users.controler.js";
-import { validateFields } from "../middleware/validate-fields.js";
-import { validateJWT } from "../middleware/validate-jwt.js";
+
+import {
+   haveRole, 
+   validateJWT,
+   validateFields
+} from '../middleware/index.js'
 import {
   isValidRole,
   isValidEmail,
@@ -44,6 +48,7 @@ router.post(
 router.patch("/", userPatch);
 router.delete("/:id",[
   validateJWT,
+  haveRole('ADMIN_ROLE', 'SALES_ROLE'),
   check("id", "Is NOT a valid ID").isMongoId(),
   check("id").custom(findUserById),
   validateFields
