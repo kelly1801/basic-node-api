@@ -19,10 +19,10 @@ import {
   findUserById,
 } from "../utils/db-validators.js";
 
-export const router = Router();
+export const userRouter = Router();
 
-router.get("/", userGet);
-router.put(
+userRouter.get("/", userGet);
+userRouter.put(
   "/:id",
   [
     check("id", "Is NOT a valid ID").isMongoId(),
@@ -32,7 +32,7 @@ router.put(
   ],
   userPut
 );
-router.post(
+userRouter.post(
   "/",
   [
     check("name", "Name is Mandatory").not().isEmpty(),
@@ -45,8 +45,8 @@ router.post(
   ],
   userPost
 );
-router.patch("/", userPatch);
-router.delete("/:id",[
+userRouter.patch("/", userPatch);
+userRouter.delete("/:id",[
   validateJWT,
   haveRole('ADMIN_ROLE', 'SALES_ROLE'),
   check("id", "Is NOT a valid ID").isMongoId(),
