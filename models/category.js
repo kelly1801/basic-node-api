@@ -1,17 +1,18 @@
 import { Schema, model } from "mongoose";
 
 const CategorySchema = Schema({
-    name: {
+    categoryName: {
         type: String,
-        required: [true, "Name is mandatory"]
+        required: [true, "Name is mandatory"],
+        unique: true,
     },
-    status : {
+    status: {
         type: Boolean,
         default: true,
         required: true,
 
     },
-    user : {
+    user: {
         type: Schema.Types.ObjectId,
         ref: "User",
         required: true
@@ -19,4 +20,10 @@ const CategorySchema = Schema({
     }
 })
 
-export default model('Category', RoleSchema)
+CategorySchema.methods.toJSON = function () {
+    const { __v, status, _id, ...category } = this.toObject();
+    category.categoryId = _id;
+    return category
+  };
+
+export const Category = model('Category', CategorySchema)

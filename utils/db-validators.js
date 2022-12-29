@@ -1,5 +1,5 @@
-import Role from "../models/role.js";
-import User from "../models/user.js";
+import {Category, Role, User} from "../models/index.js";
+
 export const isValidRole = async (role = "") => {
   const existRole = await Role.findOne({ role });
   if (!existRole) {
@@ -22,5 +22,14 @@ export const findUserById = async(id) => {
   if(!userExist) {
 
     throw new Error(`the id: ${id} doesnt exist`)
+  }
+}
+
+export const isValidCategory = async(id) => {
+  const categoryExist = await Category.findById(id)
+
+
+  if (!categoryExist || !categoryExist.status) {
+    throw new Error(`the Category: ${id} doesnt exist`)
   }
 }

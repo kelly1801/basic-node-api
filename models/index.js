@@ -1,4 +1,4 @@
-export {Server} from "./server";
-export {Role} from "./role";
-export {User} from "./user";
-export {category} from "./category";
+export { Server } from "./server.js";
+export { Role } from "./role.js";
+export { User } from "./user.js";
+export { Category } from "./category.js";

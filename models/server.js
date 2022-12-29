@@ -4,7 +4,7 @@ import { router } from "../routes/user.route.js";
 import { dbConnection } from "../db/config.db.js";
 import { authRouter } from "../routes/auth.route.js";
 import { catRouter } from "../routes/categories.route.js";
-export default class Server {
+export class Server {
   constructor() {
     this.app = express();
     this.port = process.env.PORT;
