@@ -1,10 +1,15 @@
 import express from "express";
 import cors from "cors";
-import { userRouter } from "../routes/user.route.js";
+import {
+  userRouter,
+  authRouter,
+  catRouter,
+  productRouter,
+  searchRouter,
+} from "../routes/index.js";
+
 import { dbConnection } from "../db/config.db.js";
-import { authRouter } from "../routes/auth.route.js";
-import { catRouter } from "../routes/categories.route.js";
-import { productRouter } from "../routes/products.route.js";
+
 export class Server {
   constructor() {
     this.app = express();
@@ -13,7 +18,8 @@ export class Server {
       auth: "/api/auth",
       users: "/api/users",
       categories: "/api/categories",
-      products: "/api/products"
+      products: "/api/products",
+      search: "/api/search",
     };
 
     this.connectDB();
@@ -41,6 +47,7 @@ export class Server {
     this.app.use(this.paths.users, userRouter);
     this.app.use(this.paths.categories, catRouter);
     this.app.use(this.paths.products, productRouter);
+    this.app.use(this.paths.search, searchRouter);
   }
 
   listenPort() {
