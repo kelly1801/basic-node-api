@@ -6,8 +6,9 @@ import {
   catRouter,
   productRouter,
   searchRouter,
+  uploadRouter,
 } from "../routes/index.js";
-
+import fileUpload from "express-fileupload";
 import { dbConnection } from "../db/config.db.js";
 
 export class Server {
@@ -20,6 +21,7 @@ export class Server {
       categories: "/api/categories",
       products: "/api/products",
       search: "/api/search",
+      uploads: "/api/uploads"
     };
 
     this.connectDB();
@@ -40,6 +42,12 @@ export class Server {
     this.app.use(express.json());
     // public folder
     this.app.use(express.static("public"));
+// upload files
+  this.app.use(fileUpload({
+    useTempFiles: true,
+    tempFileDir: '/tmp/',
+    createParentPath: true
+  }))
   }
 
   routes() {
@@ -48,6 +56,7 @@ export class Server {
     this.app.use(this.paths.categories, catRouter);
     this.app.use(this.paths.products, productRouter);
     this.app.use(this.paths.search, searchRouter);
+    this.app.use(this.paths.uploads, uploadRouter);
   }
 
   listenPort() {
