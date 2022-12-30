@@ -21,7 +21,7 @@ export class Server {
       categories: "/api/categories",
       products: "/api/products",
       search: "/api/search",
-      uploads: "/api/uploads"
+      uploads: "/api/uploads",
     };
 
     this.connectDB();
@@ -42,12 +42,14 @@ export class Server {
     this.app.use(express.json());
     // public folder
     this.app.use(express.static("public"));
-// upload files
-  this.app.use(fileUpload({
-    useTempFiles: true,
-    tempFileDir: '/tmp/',
-    createParentPath: true
-  }))
+    // upload files
+    this.app.use(
+      fileUpload({
+        useTempFiles: true,
+        tempFileDir: "/tmp/",
+        createParentPath: true,
+      })
+    );
   }
 
   routes() {

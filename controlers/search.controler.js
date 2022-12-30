@@ -1,5 +1,5 @@
 import { response } from "express";
-import { isObjectIdOrHexString, isValidObjectId } from "mongoose";
+import { isValidObjectId } from "mongoose";
 import { User, Category, Product } from "../models/index.js";
 const allowedCollection = [
   "users",
