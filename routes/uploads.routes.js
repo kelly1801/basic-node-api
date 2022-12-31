@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { check } from "express-validator";
 import { validateFields, isValidFile } from "../middleware/index.js";
-import { saveFile, updateImage, showImage } from "../controlers/uploads.controler.js";
+import { saveFile, updateImageCloudinary, showImage } from "../controlers/uploads.controler.js";
 import { isValidCollection } from "../utils/db-validators.js";
 export const uploadRouter = Router();
 
@@ -17,7 +17,7 @@ uploadRouter.put(
     ),
     validateFields,
   ],
-  updateImage
+  updateImageCloudinary
 );
 
 uploadRouter.get('/:collection/:id', [
