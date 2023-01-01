@@ -1,6 +1,5 @@
-
 import * as dotenv from 'dotenv'
-import  Server  from './models/server.js'
+import  { Server } from './models/server.js'
 
 dotenv.config()
 

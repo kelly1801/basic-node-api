@@ -1,15 +1,30 @@
 import express from "express";
-import cors from 'cors';
-import { router } from "../routes/user.route.js";
+import cors from "cors";
+import {
+  userRouter,
+  authRouter,
+  catRouter,
+  productRouter,
+  searchRouter,
+  uploadRouter,
+} from "../routes/index.js";
+import fileUpload from "express-fileupload";
 import { dbConnection } from "../db/config.db.js";
-import { authRouter } from "../routes/auth.route.js";
-export default class Server {
+
+export class Server {
   constructor() {
     this.app = express();
     this.port = process.env.PORT;
-    this.pathUsers = '/api/users'
-    this.authPath = '/api/auth'
-    this.connectDB()
+    this.paths = {
+      auth: "/api/auth",
+      users: "/api/users",
+      categories: "/api/categories",
+      products: "/api/products",
+      search: "/api/search",
+      uploads: "/api/uploads",
+    };
+
+    this.connectDB();
     this.middlewares();
     this.routes();
   }
@@ -17,24 +32,33 @@ export default class Server {
   // connect db
 
   async connectDB() {
-    await dbConnection()
+    await dbConnection();
   }
 
   middlewares() {
-
     // cors
-    this.app.use( cors() )
+    this.app.use(cors());
     // parse body
-    this.app.use( express.json() )
+    this.app.use(express.json());
     // public folder
     this.app.use(express.static("public"));
+    // upload files
+    this.app.use(
+      fileUpload({
+        useTempFiles: true,
+        tempFileDir: "/tmp/",
+        createParentPath: true,
+      })
+    );
   }
 
   routes() {
-    this.app.use(this.authPath, authRouter)
-
-    this.app.use(this.pathUsers, router)
-
+    this.app.use(this.paths.auth, authRouter);
+    this.app.use(this.paths.users, userRouter);
+    this.app.use(this.paths.categories, catRouter);
+    this.app.use(this.paths.products, productRouter);
+    this.app.use(this.paths.search, searchRouter);
+    this.app.use(this.paths.uploads, uploadRouter);
   }
 
   listenPort() {
